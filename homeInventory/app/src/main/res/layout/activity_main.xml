@@ -21,7 +21,7 @@
 
     <include layout="@layout/content_main" />
 
-    <include layout="@layout/fab_menu_options" />
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -31,7 +31,6 @@
         android:layout_margin="@dimen/fab_margin"
         android:onClick="ShowFloatingMenuOptions"
         app:srcCompat="@drawable/ic_add_white_24dp" />
-
 
 
 </android.support.design.widget.CoordinatorLayout>

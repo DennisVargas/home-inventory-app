@@ -21,15 +21,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView addItemTextView;
     private TextView addFolderTextView;
 
-//    save button layout
-//    private LinearLayout layoutFabSave;
-
-//    Linear layout holding the Edit submenu
-//    private LinearLayout layoutFabEdit;
-//    private LinearLayout layoutFabPhoto;
-
-//    private LinearLayout layoutFabAddItem;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,12 +30,17 @@ public class MainActivity extends AppCompatActivity {
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
 //        layoutFabAddItem = findViewById(R.id.fabAddItem);
+        initFields();
+        closeSubMenusFab();
+
+    }
+
+    private void initFields() {
         fabAddItem = findViewById(R.id.fabAddItem);
         fabAddFolder = findViewById(R.id.fabAddFolder);
         fabOptionsBkgrnd = findViewById(R.id.greyBgrndImageView);
         addItemTextView = findViewById(R.id.addItemTextView);
         addFolderTextView = findViewById(R.id.addFolderTextView);
-        closeSubMenusFab();
 
     }
 

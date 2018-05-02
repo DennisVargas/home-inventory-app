@@ -11,6 +11,4 @@ public class InventoryList extends AppCompatActivity{
     ListView listView;
     ArrayList<InventoryItem> list;
     InventoryListAdapter adapter = null;
-
-
 }

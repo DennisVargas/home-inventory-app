@@ -5,7 +5,6 @@
     android:id="@+id/fabLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="?actionBarSize"
     android:alpha="1">
 
     <ImageView
