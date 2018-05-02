@@ -1,5 +1,7 @@
 package com.vargas.dennis.homeinventory;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -11,4 +13,5 @@ public class InventoryList extends AppCompatActivity{
     ListView listView;
     ArrayList<InventoryItem> list;
     InventoryListAdapter adapter = null;
+
 }
