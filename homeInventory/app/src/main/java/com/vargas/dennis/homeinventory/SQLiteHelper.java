@@ -21,25 +21,24 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         database.execSQL(sqlQuery);
     }
 
-    public void InsertData(String name, String price, byte[] image){
+    public void InsertData(String name, String price, String quantity, byte[] image){
         SQLiteDatabase database = getWritableDatabase();
-        String sqlQuery = "INSERT INTO INVENTORYITEMS VALUES (?, ?, ?)";
+        String sqlQuery = "INSERT INTO INVENTORYITEMS VALUES (?, ?, ?, ?)";
         SQLiteStatement statement = database.compileStatement(sqlQuery);
 
         statement.clearBindings();
 
         statement.bindString(1, name);
         statement.bindString(2, price);
+        statement.bindString(3, quantity);
         try{
-            statement.bindBlob(3, image);
+            statement.bindBlob(4, image);
         }catch(Exception e){
             Log.i("BLOBIMAGE", "image is null");
 //            byte [] byteArray = new byte[1];
 //            statement.bindBlob(3,(Blob)null);
-            statement.bindNull(3);
+            statement.bindNull(4);
         }
-
-
         statement.executeInsert();
     }
 
