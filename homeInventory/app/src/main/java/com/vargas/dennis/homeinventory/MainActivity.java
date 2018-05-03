@@ -1,5 +1,6 @@
 package com.vargas.dennis.homeinventory;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -33,9 +34,9 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private ArrayList<InventoryItem> list;
     private InventoryListAdapter adapter = null;
-
+    private boolean anotherNewItem = false;
     public static SQLiteHelper sqLiteHelper;
-
+    private static final int ADD_ITEM_REQUEST_CODE = 934;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
         initFields();
 
         sqLiteHelper = new SQLiteHelper(this, "HomeInventoryDB.sqlite", null, 1);
-        sqLiteHelper.QueryData("DROP TABLE IF EXISTS INVENTORYITEMS");
-        sqLiteHelper.QueryData("CREATE TABLE IF NOT EXISTS INVENTORYITEMS (name VARCHAR PRIMARY KEY, price VARCHAR, image BLOB)");
+//        sqLiteHelper.QueryData("DROP TABLE IF EXISTS INVENTORYITEMS");
+        sqLiteHelper.QueryData("CREATE TABLE IF NOT EXISTS INVENTORYITEMS (name VARCHAR PRIMARY KEY, price VARCHAR, quantity VARCHAR, image BLOB)");
 
         gridView = (GridView) findViewById(R.id.itemGridView);
         list = new ArrayList<>();
@@ -60,40 +61,18 @@ public class MainActivity extends AppCompatActivity {
 //        list.add(new InventoryItem(null, "dexterGordon", "12", "1230", null, "Hi this is Dennis", null, null));
         adapter = new InventoryListAdapter(this, R.layout.inventory_item, list);
         gridView.setAdapter(adapter);
-        AddDatabaseEntry("Disheds", "453", null);
-        AddDatabaseEntry("tOOTHdECAY", "2", null);
-        AddDatabaseEntry("Trom", "2", null);
-        AddDatabaseEntry("ppo", "2", null);
 
-        Cursor cursor = sqLiteHelper.GetData("SELECT * FROM INVENTORYITEMS");
-        list.clear();
-
-        while(cursor.moveToNext()){
-            String name = cursor.getString(0);
-            String price = cursor.getString(1);
-            byte[] image = cursor.getBlob(2);
-
-            list.add(new InventoryItem(image, name,"1", price,null, "notes", null, null ));
-        }
+        UpdateItemGridView();
         closeSubMenusFab();
     }
-    public void AddDatabaseEntry(String name, String price, byte []image){
+
+    public void AddDatabaseEntry(String name, String price, String quantity, byte []image){
         try{
-            sqLiteHelper.InsertData(
-//                    edtName.getText().toString().trim(),
-                    name,
-//                    edtPrice.getText().toString().trim(),
-                    price,
-//                    imageViewToByte(imageView)
-                    image
-            );
-                    Snackbar.make(findViewById(R.id.mainCoordinator), "Added Successfully!", Snackbar.LENGTH_LONG)
+            sqLiteHelper.InsertData(name, price, quantity, image);// imageViewToByte(imageView)
+                    Snackbar.make(findViewById(R.id.mainCoordinator), "Item Added Successfully!", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
-//            Toast.makeText(getApplicationContext(), "Added successfully!", Toast.LENGTH_SHORT).show();
-//            edtName.setText("");
-//            edtPrice.setText("");
-//            imageView.setImageResource(R.mipmap.ic_launcher);
-        }
+            UpdateItemGridView();
+       }
         catch (Exception e){
             e.printStackTrace();
         }
@@ -114,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         return byteArray;
     }
 
-    public void ShowFloatingMenuOptions(View view) {
+    public void ToggleFloatingMenuOptions(View view) {
 //        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                .setAction("Action", null).show();
         if(fabExpanded == true){
@@ -180,8 +159,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void AddItemFabClick(View view){
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        Snackbar.make(view, "Add Item Clicked", Snackbar.LENGTH_LONG)
+            .setAction("Action", null).show();
+        Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
+//        startActivity(intent);
+        ToggleFloatingMenuOptions(view);
+        startActivityForResult(intent, ADD_ITEM_REQUEST_CODE);
+//        AddDatabaseEntry("Disheds", "453", null);
+//        AddDatabaseEntry("tOOTHdECAY", "2", null);
+//        AddDatabaseEntry("Trom", "2", null);
+//        AddDatabaseEntry("ppo", "2", null);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ADD_ITEM_REQUEST_CODE){
+            Bundle extras = data.getExtras();
+            String name = (String)extras.get("name");
+            String price = (String) extras.get("price");
+            String quantity = (String) extras.get("quantity");
+            byte[] imageBytes = (byte[]) extras.get("image");
+            AddDatabaseEntry(name, price, quantity, imageBytes);
+        }
+    }
+
+    public void UpdateItemGridView(){
+        Cursor cursor = sqLiteHelper.GetData("SELECT * FROM INVENTORYITEMS");
+        list.clear();
+
+        while(cursor.moveToNext()){
+            String name = cursor.getString(0);
+            String price = cursor.getString(1);
+            String quantity = cursor.getString(2);
+            byte[] image = cursor.getBlob(3);
+
+            list.add(new InventoryItem(image, name,"1", price,null, "notes", null, null ));
+        }
+        adapter.notifyDataSetChanged();
     }
 
     @Override
