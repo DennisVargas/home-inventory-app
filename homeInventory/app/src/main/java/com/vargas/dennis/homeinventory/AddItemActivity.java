@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,17 +23,32 @@ public class AddItemActivity extends AppCompatActivity{
     private ImageView imageView;
     private TextView nameTextView, priceTextView, quantityTextView;
     private Toolbar toolbar;
+    private static final int CAPTURE_IMAGE_REQUEST = 648;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_item_layout);
 
         imageView = (ImageView) findViewById(R.id.addItemImageView);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, CAPTURE_IMAGE_REQUEST);
+            }
+        });
         nameTextView = (TextView) findViewById(R.id.nameTextView);
         priceTextView = (TextView) findViewById(R.id.priceEditText);
         quantityTextView = (TextView) findViewById(R.id.quantityEditText);
         toolbar = (Toolbar) findViewById(R.id.addItemToolbar);
         setSupportActionBar(toolbar);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+        imageView.setImageBitmap(bitmap);
     }
 
     public byte[] ConvertImageToByteArray(ImageView imageView){

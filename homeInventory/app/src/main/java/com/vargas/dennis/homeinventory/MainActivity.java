@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
 //        layoutFabAddItem = findViewById(R.id.fabAddItem);
         initFields();
         initGridItemClick();
-        initGridItemLongClick();
         gridView.setAdapter(adapter);
 
         UpdateItemGridView();
@@ -191,11 +190,6 @@ public class MainActivity extends AppCompatActivity {
         addFolderTextView.setVisibility(View.INVISIBLE);
         fabOptionsBkgrnd.setAlpha(0f);
 
-//        layoutFabSave.setVisibility(View.INVISIBLE);
-//        layoutFabEdit.setVisibility(View.INVISIBLE);
-//        layoutFabPhoto.setVisibility(View.INVISIBLE);
-//        layoutFabAddItem.setVisibility(View.INVISIBLE);
-//        fab.setImageResource(R.drawable.ic_settings_black_24dp);
         fabExpanded = false;
     }
 
@@ -206,12 +200,7 @@ public class MainActivity extends AppCompatActivity {
         addItemTextView.setVisibility(View.VISIBLE);
         addFolderTextView.setVisibility(View.VISIBLE);
         fabOptionsBkgrnd.setAlpha(0.8f);
-//        layoutFabSave.setVisibility(View.VISIBLE);
-//        layoutFabEdit.setVisibility(View.VISIBLE);
-//        layoutFabPhoto.setVisibility(View.VISIBLE);
-//        layoutFabAddItem.setVisibility(View.VISIBLE);
-        //Change settings icon to 'X' icon
-//        fab.setImageResource(R.drawable.ic_close_black_24dp);
+
         fabExpanded = true;
     }
 
@@ -238,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
             String quantity = (String) extras.get("quantity");
             byte[] imageBytes = (byte[]) extras.get("image");
             AddDatabaseEntry(name, price, quantity, imageBytes);
+            UpdateItemGridView();
         }
     }
 
@@ -250,9 +240,8 @@ public class MainActivity extends AppCompatActivity {
             String price = cursor.getString(1);
             String quantity = cursor.getString(2);
             byte[] image = cursor.getBlob(3);
-
+            System.out.println(image);
             list.add(new InventoryItem(image, name,"1", price,null, "notes", null, null ));
-
         }
         registerForContextMenu(gridView);
         adapter.notifyDataSetChanged();
@@ -261,6 +250,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
     }
 }

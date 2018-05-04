@@ -37,8 +37,8 @@ public class ViewItemActivity extends AppCompatActivity {
         quantityTextView = (TextView) findViewById(R.id.quantityTextView);
         totalValueTextView = (TextView) findViewById(R.id.viewTotalValueTextView);
 
-        toolbar = (Toolbar) findViewById(R.id.addItemToolbar);
-        setSupportActionBar(toolbar);
+//        toolbar = (Toolbar) findViewById(R.id.viewItemToolbar);
+//        setSupportActionBar(toolbar);
         Intent intent = getIntent();
 
         Bitmap bitmap = ConvertByteArrayToBitmap(intent.getByteArrayExtra("image"));
@@ -72,13 +72,6 @@ public class ViewItemActivity extends AppCompatActivity {
         if(itemImage != null)
             bitmap = BitmapFactory.decodeByteArray(itemImage, 0, itemImage.length);
         return bitmap;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.add_item_menu, menu);
-        return true;
     }
 
 }
