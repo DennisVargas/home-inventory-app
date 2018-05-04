@@ -50,11 +50,13 @@ public class ViewItemActivity extends AppCompatActivity {
         nameTextView.setText("Name:  "+intent.getStringExtra("name"));
 
         quantityTextView.setText("Quantity:  "+intent.getStringExtra("quantity"));
+        Log.i("ITEMVIEW", intent.getStringExtra("quantity"));
         priceTextView.setText("Price:  $" + intent.getStringExtra("price"));
 
         try{
             quantity = Integer.parseInt(intent.getStringExtra("quantity"));
         }catch(Exception e){
+
             quantity = 1;
         }
         try{

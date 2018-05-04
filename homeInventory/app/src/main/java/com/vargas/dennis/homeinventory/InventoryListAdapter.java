@@ -49,6 +49,7 @@ public class InventoryListAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView = convertView;
+
         TagViews tagViews = new TagViews();
         if (rowView == null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -71,12 +72,22 @@ public class InventoryListAdapter extends BaseAdapter{
         InventoryItem inventoryItem = itemsList.get(position);
 
         tagViews.nameTextView.setText(inventoryItem.getName());
-        tagViews.priceTextView.setText(inventoryItem.getPrice());
+        try {
+            tagViews.priceTextView.setText(String.format("$%.2f", Double.parseDouble(inventoryItem.getPrice())));
+        }catch(Exception e){
+            tagViews.priceTextView.setText(String.format("$%.2f", 0f));
+        }
 
         byte [] itemImage = inventoryItem.getImage();
+
         if(itemImage != null){
             Bitmap bitmap = BitmapFactory.decodeByteArray(itemImage, 0, itemImage.length);
             tagViews.imageView.setImageBitmap(bitmap);
+            Log.i("IMAGEADAPTER","image for: " + inventoryItem.getName());
+        }
+        else{
+            Log.i("IMAGEADAPTER","no image for:"+inventoryItem.getName());
+            tagViews.imageView.setImageResource(R.drawable.ic_image_white_24dp);
         }
         return rowView;
     }

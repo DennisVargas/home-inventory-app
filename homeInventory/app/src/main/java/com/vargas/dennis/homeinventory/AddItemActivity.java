@@ -3,12 +3,14 @@ package com.vargas.dennis.homeinventory;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,8 +49,13 @@ public class AddItemActivity extends AppCompatActivity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bitmap = (Bitmap)data.getExtras().get("data");
-        imageView.setImageBitmap(bitmap);
+        if(requestCode == CAPTURE_IMAGE_REQUEST && data != null) {
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90f);
+            Bitmap rotBitmap = Bitmap.createBitmap(bitmap,0,0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            imageView.setImageBitmap(rotBitmap);
+        }
     }
 
     public byte[] ConvertImageToByteArray(ImageView imageView){
@@ -68,7 +75,7 @@ public class AddItemActivity extends AppCompatActivity{
         name = nameTextView.getText().toString().trim();
         price = priceTextView.getText().toString().trim();
         quantity = quantityTextView.getText().toString().trim();
-
+        Log.i("SAVE","add quantity"+quantity);
         Intent returnIntent = new Intent();
         returnIntent.putExtra("name",name);
         returnIntent.putExtra("price",price);

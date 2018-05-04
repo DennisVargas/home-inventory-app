@@ -6,6 +6,7 @@ import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import java.sql.Blob;
@@ -23,7 +24,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 
     public void InsertData(String name, String price, String quantity, byte[] image){
         SQLiteDatabase database = getWritableDatabase();
-        String sqlQuery = "INSERT INTO INVENTORYITEMS VALUES (?, ?, ?, ?)";
+        String sqlQuery = "INSERT INTO INVENTORYITEMS VALUES (null, ?, ?, ?, ?)";
         SQLiteStatement statement = database.compileStatement(sqlQuery);
 
         statement.clearBindings();
@@ -31,6 +32,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         statement.bindString(1, name);
         statement.bindString(2, price);
         statement.bindString(3, quantity);
+        Log.i("SQLHELPER","add-itmem: "+quantity);
         try{
             statement.bindBlob(4, image);
         }catch(Exception e){
@@ -39,16 +41,20 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 //            statement.bindBlob(3,(Blob)null);
             statement.bindNull(4);
         }
-        statement.executeInsert();
+        try{
+            statement.executeInsert();
+        }catch (Exception e){
+        }
+
     }
 
-    public void DeleteData(String name){
+    public void DeleteData(int id){
         SQLiteDatabase database = getWritableDatabase();
 
-        String sql = "DELETE FROM INVENTORYITEMS WHERE name = ?";
+        String sql = "DELETE FROM INVENTORYITEMS WHERE id = ?";
         SQLiteStatement statement = database.compileStatement(sql);
         statement.clearBindings();
-        statement.bindString(1, name);
+        statement.bindLong(1, id);
         statement.execute();
         database.close();
     }

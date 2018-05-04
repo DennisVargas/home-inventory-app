@@ -57,16 +57,6 @@ public class MainActivity extends AppCompatActivity {
         closeSubMenusFab();
     }
 
-    private void initGridItemLongClick() {
-//        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                return false;
-//            }
-//        });
-    }
-
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -89,7 +79,8 @@ public class MainActivity extends AppCompatActivity {
         String[] menuItems = getResources().getStringArray(R.array.deleteMenu);
         String menuItemName = menuItems[menuItemIndex];
         InventoryItem inventoryItem = list.get(info.position);
-        sqLiteHelper.DeleteData(inventoryItem.getName());
+        int id = inventoryItem.getId();
+        sqLiteHelper.DeleteData(id);
         UpdateItemGridView();
         return true;
     }
@@ -104,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 InventoryItem item = (InventoryItem)parent.getItemAtPosition(position);
                 intent.putExtra("name", item.getName());
                 intent.putExtra("quantity", item.getQuantity());
+                Log.i("MAINACTIVITY", item.getQuantity());
                 intent.putExtra("price", item.getPrice());
                 intent.putExtra("image", item.getImage());
                 startActivity(intent);
@@ -134,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 //        database initialization and loading
         sqLiteHelper = new SQLiteHelper(this, "HomeInventoryDB.sqlite", null, 1);
 //        sqLiteHelper.QueryData("DROP TABLE IF EXISTS INVENTORYITEMS");
-        sqLiteHelper.QueryData("CREATE TABLE IF NOT EXISTS INVENTORYITEMS (name VARCHAR PRIMARY KEY, price VARCHAR, quantity VARCHAR, image BLOB)");
+        sqLiteHelper.QueryData("CREATE TABLE IF NOT EXISTS INVENTORYITEMS (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, price VARCHAR, quantity VARCHAR, image BLOB)");
 
         gridView = (GridView) findViewById(R.id.itemGridView);
         list = new ArrayList<>();
@@ -220,11 +212,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == ADD_ITEM_REQUEST_CODE){
+        if(requestCode == ADD_ITEM_REQUEST_CODE && data != null){
             Bundle extras = data.getExtras();
             String name = (String)extras.get("name");
             String price = (String) extras.get("price");
             String quantity = (String) extras.get("quantity");
+            Log.i("MAIN", "result activity: "+ quantity);
             byte[] imageBytes = (byte[]) extras.get("image");
             AddDatabaseEntry(name, price, quantity, imageBytes);
             UpdateItemGridView();
@@ -236,12 +229,13 @@ public class MainActivity extends AppCompatActivity {
         list.clear();
 
         while(cursor.moveToNext()){
-            String name = cursor.getString(0);
-            String price = cursor.getString(1);
-            String quantity = cursor.getString(2);
-            byte[] image = cursor.getBlob(3);
+            int id = cursor.getInt(0);
+            String name = cursor.getString(1);
+            String price = cursor.getString(2);
+            String quantity = cursor.getString(3);
+            byte[] image = cursor.getBlob(4);
             System.out.println(image);
-            list.add(new InventoryItem(image, name,"1", price,null, "notes", null, null ));
+            list.add(new InventoryItem(image, name, quantity, price,null, "notes", null, null, id ));
         }
         registerForContextMenu(gridView);
         adapter.notifyDataSetChanged();
