@@ -13,10 +13,19 @@ public class InventoryItem {
     private String notes;
     private ProductInfo productInfo;
     private LendingInfo lendInfo;
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public InventoryItem(byte[] image, String name, String quantity, String price,
                          ArrayList<String> tags, String notes,
-                         ProductInfo productInfo, LendingInfo lendInfo) {
+                         ProductInfo productInfo, LendingInfo lendInfo, int id) {
         this.image = image;
         this.name = name;
         this.quantity = quantity;
@@ -25,6 +34,7 @@ public class InventoryItem {
         this.notes = notes;
         this.productInfo = productInfo;
         this.lendInfo = lendInfo;
+        this.id = id;
     }
 
 
