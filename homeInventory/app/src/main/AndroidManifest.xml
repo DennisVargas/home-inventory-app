@@ -22,10 +22,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddItemActivity"
-            android:label="Add Item Activity"
+            android:name=".ViewItemActivity"
+            android:label="View Item"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".AddItemActivity"
+            android:label="Add Item"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
 
 </manifest>

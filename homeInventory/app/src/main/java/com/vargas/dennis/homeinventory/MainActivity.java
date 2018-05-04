@@ -9,9 +9,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,23 +50,68 @@ public class MainActivity extends AppCompatActivity {
         fab = (FloatingActionButton) findViewById(R.id.fab);
 //        layoutFabAddItem = findViewById(R.id.fabAddItem);
         initFields();
-
-        sqLiteHelper = new SQLiteHelper(this, "HomeInventoryDB.sqlite", null, 1);
-//        sqLiteHelper.QueryData("DROP TABLE IF EXISTS INVENTORYITEMS");
-        sqLiteHelper.QueryData("CREATE TABLE IF NOT EXISTS INVENTORYITEMS (name VARCHAR PRIMARY KEY, price VARCHAR, quantity VARCHAR, image BLOB)");
-
-        gridView = (GridView) findViewById(R.id.itemGridView);
-        list = new ArrayList<>();
-//        list.add(new InventoryItem(null, "dexterGordon", "12", "1230", null, "Hi this is Dennis", null, null));
-//        list.add(new InventoryItem(null, "dexterGordon", "12", "1230", null, "Hi this is Dennis", null, null));
-//        list.add(new InventoryItem(null, "dexterGordon", "12", "1230", null, "Hi this is Dennis", null, null));
-//        list.add(new InventoryItem(null, "dexterGordon", "12", "1230", null, "Hi this is Dennis", null, null));
-//        list.add(new InventoryItem(null, "dexterGordon", "12", "1230", null, "Hi this is Dennis", null, null));
-        adapter = new InventoryListAdapter(this, R.layout.inventory_item, list);
+        initGridItemClick();
+        initGridItemLongClick();
         gridView.setAdapter(adapter);
 
         UpdateItemGridView();
         closeSubMenusFab();
+    }
+
+    private void initGridItemLongClick() {
+//        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                return false;
+//            }
+//        });
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId()==R.id.itemGridView) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+//            menu.setHeaderTitle(list.get(info.position).getName());
+
+            String[] menuItems = getResources().getStringArray(R.array.deleteMenu);
+//            String []menuItems = {"Delete"};
+            for (int i = 0; i<menuItems.length; i++) {
+                menu.add(Menu.NONE, i, i, menuItems[i]);
+            }
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem menuItem) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuItem.getMenuInfo();
+        int menuItemIndex = menuItem.getItemId();
+        String[] menuItems = getResources().getStringArray(R.array.deleteMenu);
+        String menuItemName = menuItems[menuItemIndex];
+        InventoryItem inventoryItem = list.get(info.position);
+        sqLiteHelper.DeleteData(inventoryItem.getName());
+        UpdateItemGridView();
+        return true;
+    }
+
+    private void initGridItemClick() {
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Snackbar.make(findViewById(R.id.mainCoordinator),"Item Clicked!!!!",
+                        Snackbar.LENGTH_LONG).show();
+                Intent intent = new Intent(MainActivity.this, ViewItemActivity.class);
+                InventoryItem item = (InventoryItem)parent.getItemAtPosition(position);
+                intent.putExtra("name", item.getName());
+                intent.putExtra("quantity", item.getQuantity());
+                intent.putExtra("price", item.getPrice());
+                intent.putExtra("image", item.getImage());
+                startActivity(intent);
+//                ToggleFloatingMenuOptions(view);
+//                startActivityForResult(intent, ADD_ITEM_REQUEST_CODE);
+            }
+        });
     }
 
     public void AddDatabaseEntry(String name, String price, String quantity, byte []image){
@@ -83,6 +131,15 @@ public class MainActivity extends AppCompatActivity {
         fabOptionsBkgrnd = findViewById(R.id.greyBgrndImageView);
         addItemTextView = findViewById(R.id.addItemTextView);
         addFolderTextView = findViewById(R.id.addFolderTextView);
+
+//        database initialization and loading
+        sqLiteHelper = new SQLiteHelper(this, "HomeInventoryDB.sqlite", null, 1);
+//        sqLiteHelper.QueryData("DROP TABLE IF EXISTS INVENTORYITEMS");
+        sqLiteHelper.QueryData("CREATE TABLE IF NOT EXISTS INVENTORYITEMS (name VARCHAR PRIMARY KEY, price VARCHAR, quantity VARCHAR, image BLOB)");
+
+        gridView = (GridView) findViewById(R.id.itemGridView);
+        list = new ArrayList<>();
+        adapter = new InventoryListAdapter(this, R.layout.inventory_item, list);
     }
 
     private byte[] ImageViewToByte(ImageView image){
@@ -195,7 +252,9 @@ public class MainActivity extends AppCompatActivity {
             byte[] image = cursor.getBlob(3);
 
             list.add(new InventoryItem(image, name,"1", price,null, "notes", null, null ));
+
         }
+        registerForContextMenu(gridView);
         adapter.notifyDataSetChanged();
     }
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/addItemCoordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddItemActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ViewItemCoordinator"
+    tools:context=".ViewItemActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -46,16 +46,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@drawable/ic_image_white_24dp" />
 
-            <EditText
+            <TextView
                 android:id="@+id/nameTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:ems="10"
-                android:hint="@string/enter_item_name"
-                android:inputType="textPersonName"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -64,7 +62,7 @@
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:orientation="horizontal"
                 android:paddingLeft="8dp"
@@ -74,40 +72,35 @@
                 app:layout_constraintTop_toBottomOf="@+id/nameTextView">
 
 
-                <EditText
-                    android:id="@+id/quantityEditText"
+                <TextView
+                    android:id="@+id/quantityTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="Enter Quanity"
-                    android:inputType="number"
-                    android:textAlignment="textStart"
+                    android:textAlignment="center"
                     app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
 
-                <EditText
-                    android:id="@+id/priceEditText"
+                <TextView
+                    android:id="@+id/priceTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="@string/enter_price"
-                    android:inputType="numberDecimal"
+                    android:textAlignment="center"
                     app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
             </LinearLayout>
 
             <TextView
-                android:id="@+id/addTotalValueTextView"
+                android:id="@+id/viewTotalValueTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Total Value: $"
+                android:text="@string/total_value"
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

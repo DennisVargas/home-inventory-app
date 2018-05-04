@@ -8,7 +8,7 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <include layout="@layout/item_list_layout" />
+    <include layout="@layout/item_grid_layout" />
     <include layout="@layout/fab_menu_options" />
 
 </android.support.constraint.ConstraintLayout>

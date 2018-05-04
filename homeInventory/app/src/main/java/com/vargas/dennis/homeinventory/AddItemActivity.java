@@ -1,24 +1,18 @@
 package com.vargas.dennis.homeinventory;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 
@@ -33,7 +27,7 @@ public class AddItemActivity extends AppCompatActivity{
         setContentView(R.layout.add_item_layout);
 
         imageView = (ImageView) findViewById(R.id.addItemImageView);
-        nameTextView = (TextView) findViewById(R.id.nameEditText);
+        nameTextView = (TextView) findViewById(R.id.nameTextView);
         priceTextView = (TextView) findViewById(R.id.priceEditText);
         quantityTextView = (TextView) findViewById(R.id.quantityEditText);
         toolbar = (Toolbar) findViewById(R.id.addItemToolbar);

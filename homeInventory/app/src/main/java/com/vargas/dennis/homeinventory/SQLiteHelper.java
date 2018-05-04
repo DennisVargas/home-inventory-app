@@ -42,6 +42,17 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         statement.executeInsert();
     }
 
+    public void DeleteData(String name){
+        SQLiteDatabase database = getWritableDatabase();
+
+        String sql = "DELETE FROM INVENTORYITEMS WHERE name = ?";
+        SQLiteStatement statement = database.compileStatement(sql);
+        statement.clearBindings();
+        statement.bindString(1, name);
+        statement.execute();
+        database.close();
+    }
+
     public Cursor GetData(String sqlQuery){
         SQLiteDatabase database = getReadableDatabase();
         return database.rawQuery(sqlQuery, null);
