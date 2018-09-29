@@ -21,6 +21,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ViewItemActivity"
+            android:label="View Item"
+            android:parentActivityName=".MainActivity"
+            />
+        <activity
+            android:name=".AddItemActivity"
+            android:label="Add Item"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
 
 </manifest>

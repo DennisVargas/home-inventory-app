@@ -7,12 +7,35 @@ import java.util.ArrayList;
 public class InventoryItem {
     private byte[] image;
     private String name;
-    private int quantity;
-    private int price;
+    private String quantity;
+    private String price;
     private ArrayList<String> tags;
     private String notes;
     private ProductInfo productInfo;
     private LendingInfo lendInfo;
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public InventoryItem(byte[] image, String name, String quantity, String price,
+                         ArrayList<String> tags, String notes,
+                         ProductInfo productInfo, LendingInfo lendInfo, int id) {
+        this.image = image;
+        this.name = name;
+        this.quantity = quantity;
+        this.price = price;
+        this.tags = tags;
+        this.notes = notes;
+        this.productInfo = productInfo;
+        this.lendInfo = lendInfo;
+        this.id = id;
+    }
 
 
     private class LendingInfo{
@@ -52,19 +75,19 @@ public class InventoryItem {
         this.name = name;
     }
 
-    public int getQuantity() {
+    public String getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
