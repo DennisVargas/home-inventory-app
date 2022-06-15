@@ -1,6 +1,6 @@
 # Home Inventory App
 
-## Written by Dennis Vargas, in Java and SQL with Android Studio
+## Written by Dennis Vargas, in Java with Android Studio
 
 ### Current Version: 0.1
 
